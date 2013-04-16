@@ -10,8 +10,10 @@
 
 @interface FrameByFrameAnimation : UIImageView
 
+@property (nonatomic, retain) UIImageView *animationImageView;
+
+- (void)setAnimating:(int)animationImageNum :(NSString *)animationImageSuffix :(float)animationDuration :(int)animationRepeatCount :(NSInteger)animationImageX :(NSInteger)animationImageY :(NSInteger)animationImageWidth :(NSInteger)animationImageHeight;
 - (NSArray *)animationImages:(NSMutableArray *)animationImageNameList;
-- (void)setAnimating:(UIImageView *)animationImageView :(int)animationImageNum :(NSString *)animationImageSuffix :(float)animationDuration :(int)animationRepeatCount;
 + (UIImage *)getUIImageFromResources:(NSString*)fileName ext:(NSString*)ext;
 
 @end

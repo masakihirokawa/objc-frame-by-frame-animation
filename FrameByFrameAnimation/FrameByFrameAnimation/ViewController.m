@@ -1,8 +1,8 @@
 //
 //  ViewController.m
-//  FrameByFrameAnimation
+//  FBFAnimation
 //
-//  Created by 廣川政樹 on 2013/04/05.
+//  Created by 廣川政樹 on 2013/04/03.
 //  Copyright (c) 2013年 Dolice. All rights reserved.
 //
 
@@ -14,6 +14,16 @@
 @end
 
 @implementation ViewController
+
+//アニメーションのフレームレート
+float const _animationFps = 24.0f;
+//アニメーションのリピート回数を無限に指定
+NSInteger _animationRepeatNum = 0;
+//アニメーションの座標・寸法指定
+NSInteger _animationImageX;
+NSInteger _animationImageY;
+NSInteger const _animationImageWidth = 85;
+NSInteger const _animationImageHeight = 120;
 
 - (void)viewDidLoad
 {
@@ -27,25 +37,35 @@
   [super didReceiveMemoryWarning];
 }
 
+//アニメーション開始
 - (void)startAnimationImage
 {
-  //画像のサイズと座標を定義
-  NSInteger imageWidth = 85;
-  NSInteger imageHeight = 120;
-  NSInteger imageX = (self.view.frame.size.width / 2) - (imageWidth / 2);
-  NSInteger imageY = (self.view.frame.size.height / 2) - (imageHeight / 2);
-  CGRect rect = CGRectMake(imageX, imageY, imageWidth, imageHeight);
-  //FrameByFrameAnimatonクラス初期化
+  //クラス初期化
   FrameByFrameAnimation *fbfAnimation = [[FrameByFrameAnimation alloc] init];
-  //imageViewを初期化
-  UIImageView *animationImageView = [[UIImageView alloc] initWithFrame:rect];
-  //FrameByFrameAnimationクラスの setAnimatingクラス呼び出し
-  //UIImageView, 総フレーム数, 画像ファイル名の接頭詞, アニメーション秒数, アニメーションリピート回数の順にパラメータを渡す
-  [fbfAnimation setAnimating:animationImageView:14:@"frame":1.0:0];
+  //アニメーションの総フレーム数
+  NSInteger animationFrames = 14;
+  //アニメーションファイルの接頭詞
+  NSString *animationPrefix = @"frame";
+  //アニメーションをセンターに配置
+  NSInteger _animationImageX = (self.view.frame.size.width / 2) - (_animationImageWidth / 2);
+  NSInteger _animationImageY = (self.view.frame.size.height / 2) - (_animationImageHeight / 2);
   //アニメーション開始
-  [animationImageView startAnimating];
-  //animationImageViewをステージに追加
-  [self.view addSubview:animationImageView];
+  [fbfAnimation setAnimating:animationFrames
+                            :animationPrefix
+                            :[self animationSeconds:animationFrames]
+                            :_animationRepeatNum
+                            :_animationImageX
+                            :_animationImageY
+                            :_animationImageWidth
+                            :_animationImageHeight];
+  //ステージに追加
+  [self.view addSubview:[fbfAnimation animationImageView]];
+}
+
+//アニメーション秒数を取得
+- (float)animationSeconds:(NSInteger)animationFrames
+{
+  return (animationFrames / _animationFps);
 }
 
 @end
